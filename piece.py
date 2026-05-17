@@ -20,6 +20,10 @@ class Piece:
     def isCaptured(self,Captured):
         self._isCaptured=Captured
 
+    @property
+    def symbol(self):
+        return self._Symbol
+
 
     def displaySymbol(self):
         prefix= "w" if self._color=="White" else "b"

@@ -4,9 +4,9 @@ class Bishop(Piece):
         super().__init__(cRow,cCol,color,"B")
 
 
-        def viewLegalMoves(self,board):
-            directions = [(-1,-1),(1,1),
-                            (1,-1),(-1,1)]
-            
-            return self.slide(board,directions)
-            
+    def viewLegalMoves(self,board):
+        directions = [(-1,-1),(1,1),
+                        (1,-1),(-1,1)]
+                
+        return self.slide(board,directions)
+                

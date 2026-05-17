@@ -111,7 +111,32 @@ class Board:
                         else:
                                return False
                 else: return False
-            
+
+
+        def apply_move(self,move):
+                targetSq= self.grid[move.newRow][move.newCol]
+
+                if targetSq.is_occupied:
+                        move.capturedPiece= targetSq.pieceOccupying
+
+                #check setter if this fails
+                self.grid[move.newRow][move.newCol].pieceOccupying = move.piece
+                self.grid[move.oldRow][move.oldCol].pieceOccupying=None
+
+                print(f"updated piece  {self.grid[move.newRow][move.newCol].pieceOccupying}")
+                move.piece._currRow = move.newRow
+                move.piece._currCol = move.newCol
+
+
+        def checkWinner(self,move):
+                if move.wasCap:
+                        pieceCapped = move.capturedPiece
+
+                        if pieceCapped.symbol =="K":
+                                return move.piece.color
+                        else:
+                                return None
+
         def printBoard(self):
                         print()
                         print("     a    b    c    d    e")
