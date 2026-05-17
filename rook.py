@@ -1,5 +1,11 @@
 from piece import Piece
 class Rook(Piece):
-    def  __init__(self,cRow,cCol,isWhite):
-        super().__init__(cRow,cCol,isWhite,"R")
+    def  __init__(self,cRow,cCol,color):
+        super().__init__(cRow,cCol,color,"R")
 
+    def viewLegalMoves(self,board):
+           directions = [(-1,0),(1,0),
+                        (0,-1),(0,1)]
+           
+           return self.slide(board,directions)
+        
