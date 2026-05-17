@@ -1,10 +1,13 @@
 from board import Board
+import random
 class Game:
    
     def __init__(self):
         self._board = Board(6,5)
         self._whiteCaps=[]
         self._blackCaps=[]
+        self._numMoves =0
+        self._isWhitesTurn=True
 
     def viewMoves(self):
                 
@@ -30,6 +33,29 @@ class Game:
                     moves.extend(sq.pieceOccupying.viewLegalMoves(self._board))
         return moves
     
+
+    def selfPlay(self):
+        while self._numMoves<50:
+            moves=self.getLegalMoves("White" if self._isWhitesTurn else "Black")
+            
+            if not moves:
+                print("Draw due to no more moves")
+                return
+            
+            randMove= random.choice(moves)
+            self.board.apply_move(randMove)
+            self.board.printBoard()
+            print(f"{'White' if self._isWhitesTurn else 'Black'} played: {randMove}")
+
+            result = self.board.checkWinner(randMove)
+            if result:
+                print(f"{result} is the winner")
+                break
+
+            self._isWhitesTurn = not self._isWhitesTurn
+            self._numMoves += 1
+
+        print("MOVE LIM")
     @property
     def board(self):
         return self._board
