@@ -11,7 +11,6 @@ class Game:
 
     def viewMoves(self):
                 
-        self._board.printBoard()
         moves = []
         for r in range(self._board.rows):
             for c in range(self._board.cols):
@@ -32,19 +31,20 @@ class Game:
                 if sq.is_occupied and sq.pieceOccupying.color == color:
                     moves.extend(sq.pieceOccupying.viewLegalMoves(self._board))
         return moves
-    
+
+
 
     def selfPlay(self):
-        while self._numMoves<50:
+        while self._numMoves<500:
             moves=self.getLegalMoves("White" if self._isWhitesTurn else "Black")
-            
+            self.board.printBoard("White" if self._isWhitesTurn else "Black")
             if not moves:
                 print("Draw due to no more moves")
                 return
-            
+           
             randMove= random.choice(moves)
             self.board.apply_move(randMove)
-            self.board.printBoard()
+        
             print(f"{'White' if self._isWhitesTurn else 'Black'} played: {randMove}")
 
             result = self.board.checkWinner(randMove)

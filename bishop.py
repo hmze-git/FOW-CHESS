@@ -9,4 +9,8 @@ class Bishop(Piece):
                         (1,-1),(-1,1)]
                 
         return self.slide(board,directions)
-                
+    
+    def getAttackSquars(self,board):
+        directions = [(-1,-1),(1,1),
+                        (1,-1),(-1,1)]
+        return self.slideAttack(board,directions)

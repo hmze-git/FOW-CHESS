@@ -61,5 +61,29 @@ class Piece:
 
         return moves  
 
+    def slideAttack(self,board,directions):
+        attackSQ=set()
+        for dr,dc in directions:
+            computedRow = self._currRow + dr
+            computedCol = self._currCol + dc
 
-    
+        while True:
+            isLegal,isCap=board.isValidLocation(computedRow,computedCol,self._color)
+
+            if not board.inBounds(computedRow,computedCol):
+                break
+   
+            if isLegal:
+           
+                attackSQ.add((computedRow,computedCol))
+
+            #stop sliding when you hit your own piece or enemy piece
+
+            if isCap or not isLegal:
+                break
+            #Add every tuple until you see the limit for all of them
+            computedRow+=dr
+            computedCol+=dc
+
+
+        return attackSQ  

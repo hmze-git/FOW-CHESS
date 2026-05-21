@@ -88,6 +88,19 @@ class Board:
                         self.grid[4][c].pieceOccupying=Wpawn
                         self.grid[5][c].pieceOccupying=WKing
 
+        def getVisibleSquares(self,color):
+                atqSq=set()
+                for r in range(self.rows):
+                        for c in range (self.cols):
+                                sq = self.grid[r][c]
+                                if sq.is_occupied and sq.pieceOccupying.color == color:
+                                        atqSQ=sq.pieceOccupying.getAttackSquars(self)
+
+                                        atqSq=atqSq.union(atqSQ)
+                
+                return atqSq
+                       
+               
 
         def isValidLocation(self,computedRow,computedCol,color):
      
@@ -137,18 +150,27 @@ class Board:
                         else:
                                 return None
 
-        def printBoard(self):
+        def printBoard(self,color):
+                        visibleSq=self.getVisibleSquares(color)
                         print()
+                        print(f"{color}s turn")
                         print("     a    b    c    d    e")
                         print("   +----+----+----+----+----+")
                         for r in range(self.rows):
                                 print(f" {r} |", end="")
                                 for c in range(self.cols):
                                         square = self.grid[r][c]
-                                        if square.is_occupied:
+                                        if square.is_occupied and square._pieceOccupying.color==color:
+                                                       
                                                 print(f" {square.pieceOccupying.displaySymbol()} |", end="")
+                                        elif (r,c) in visibleSq:
+                                                if square.is_occupied and square._pieceOccupying.color!=color:
+                                                        print(f" {square.pieceOccupying.displaySymbol()} |", end="")
+                                                if not square.is_occupied :
+                                                        print(f" #  |", end="")
                                         else:
-                                                print("  # |", end="")
+                                                print(f" ?? |", end="")
+                                       
                                 print()
                                 print("   +----+----+----+----+----+")
                         print()

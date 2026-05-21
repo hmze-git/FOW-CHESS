@@ -8,4 +8,8 @@ class Rook(Piece):
                         (0,-1),(0,1)]
            
            return self.slide(board,directions)
-        
+    
+    def getAttackSquars(self,board):
+        directions = [(-1,0),(1,0),
+                        (0,-1),(0,1)]
+        return self.slideAttack(board,directions)

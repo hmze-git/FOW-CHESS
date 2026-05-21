@@ -10,4 +10,9 @@ class Queen(Piece):
             
            
            return self.slide(board,directions)
-        
+    
+    def getAttackSquars(self,board):
+        directions = [(-1,0),(1,0),
+                        (0,-1),(0,1),(-1,-1),(1,1),
+                            (1,-1),(-1,1)]
+        return self.slideAttack(board,directions)

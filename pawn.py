@@ -28,3 +28,14 @@ class Pawn(Piece):
                         moves.append(m)
         return moves
         
+    def getAttackSquars(self,board):
+        attackSQ=set()
+        dir=1 if self.color=="black" else -1
+        forward = self._currRow+ dir
+            #capture moves
+        for dc in [-1,1]:
+            capRow= forward
+            capCol=self._currCol+dc
+            if board.inBounds(capRow,capCol):
+                    attackSQ.add((capRow,capCol)) 
+        return attackSQ
