@@ -2,14 +2,14 @@ from piece import Piece
 from move import Move
 class Pawn(Piece):
     def  __init__(self,cRow,cCol,color):
-        super().__init__(cRow,cCol,color,"P")
+        super().__init__(cRow,cCol,color,"P",1)
 
 
     
     def viewLegalMoves(self,board):
         moves=[]
 
-        dir=1 if self.color=="black" else -1
+        dir=1 if self.color=="Black" else -1
         forward = self._currRow+ dir
 
         if board.inBounds(forward,self._currCol):
@@ -30,7 +30,9 @@ class Pawn(Piece):
         
     def getAttackSquars(self,board):
         attackSQ=set()
-        dir=1 if self.color=="black" else -1
+        dir=1 if self._color=="Black" else -1
+
+        print()
         forward = self._currRow+ dir
             #capture moves
         for dc in [-1,1]:

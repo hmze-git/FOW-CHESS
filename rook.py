@@ -1,7 +1,7 @@
 from piece import Piece
 class Rook(Piece):
     def  __init__(self,cRow,cCol,color):
-        super().__init__(cRow,cCol,color,"R")
+        super().__init__(cRow,cCol,color,"R",5)
 
     def viewLegalMoves(self,board):
            directions = [(-1,0),(1,0),

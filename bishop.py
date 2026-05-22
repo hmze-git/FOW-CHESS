@@ -1,7 +1,7 @@
 from piece import Piece
 class Bishop(Piece):
     def  __init__(self,cRow,cCol,color):
-        super().__init__(cRow,cCol,color,"B")
+        super().__init__(cRow,cCol,color,"B",3)
 
 
     def viewLegalMoves(self,board):

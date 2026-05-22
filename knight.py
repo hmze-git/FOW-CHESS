@@ -2,7 +2,7 @@ from piece import Piece
 from move import Move
 class Knight(Piece):
     def  __init__(self,cRow,cCol,color):
-        super().__init__(cRow,cCol,color,"N")
+        super().__init__(cRow,cCol,color,"N",3)
 
   
     def viewLegalMoves(self,board):

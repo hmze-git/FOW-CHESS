@@ -1,11 +1,12 @@
 from move import Move
 class Piece:
-    def __init__(self,cRow,cCol,color,symbol):
+    def __init__(self,cRow,cCol,color,symbol,value):
         self._color=color
         self._currRow=cRow
         self._currCol=cCol
         self._isCaptured=False
         self._Symbol=symbol
+        self._Value=None
 
     #get the captured proprty
     @property
@@ -23,6 +24,9 @@ class Piece:
     @property
     def symbol(self):
         return self._Symbol
+    @property
+    def Value(self):
+        return self._Value
 
 
     def displaySymbol(self):

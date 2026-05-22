@@ -5,6 +5,7 @@ from king import King
 from pawn import Pawn
 from rook import Rook
 from bishop import Bishop
+import copy
 class Board:
         def __init__(self,rows:int =6,cols:int=5):
                 self.rows=rows
@@ -100,7 +101,16 @@ class Board:
                 
                 return atqSq
                        
-               
+        def getLegalMoves(self,color):
+                moves = []
+                color = color
+
+                for r in range(self.rows):
+                        for c in range (self.cols):
+                                sq = self.grid[r][c]
+                                if sq.is_occupied and sq.pieceOccupying.color == color:
+                                        moves.extend(sq.pieceOccupying.viewLegalMoves(self._board))
+                return moves               
 
         def isValidLocation(self,computedRow,computedCol,color):
      
@@ -149,6 +159,29 @@ class Board:
                                 return move.piece.color
                         else:
                                 return None
+
+
+        def copyBoard(self):
+                newBoard= Board.__new__(Board)
+                newBoard.rows=self.rows
+                newBoard.cols=self.cols
+                newBoard.grid=[
+                       
+                        [
+                                Square(r,c) for c in range(5)
+                        ]
+                         for r in range(6)
+                ] # reads backwards 
+
+                for r in range(self.rows):
+                       for c in range (self.cols):
+                              originalSQ=self.grid[r][c]
+                              if originalSQ.is_occupied:
+                                     originPiece=originalSQ.pieceOccupying
+                                     newPiece= copy.deepcopy(originPiece)
+                                     newBoard.grid[r][c].pieceOccupying=newPiece
+                return newBoard
+
 
         def printBoard(self,color):
                         visibleSq=self.getVisibleSquares(color)

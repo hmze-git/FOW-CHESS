@@ -16,5 +16,14 @@ b=g.board
 #print(g.board.checkWinner(amove))  # should print "white"
 #b.printBoard()
 
+s= g.board.copyBoard()
 
-g.selfPlay()
+print("ORG")
+b.printBoard("White")
+b.printBoard("Black")
+
+
+print("COP")
+s.printBoard("White")
+s.printBoard("Black")
+#g.selfPlay()
