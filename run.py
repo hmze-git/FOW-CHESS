@@ -1,5 +1,6 @@
 from game import Game
 from move import Move
+from QLearning import QLearningAgent
 g = Game()
 g.viewMoves()
 b=g.board
@@ -17,13 +18,15 @@ b=g.board
 #b.printBoard()
 
 s= g.board.copyBoard()
+q=QLearningAgent()
+#print("ORG")
+#b.printBoard("White")
+#b.printBoard("Black")
 
-print("ORG")
-b.printBoard("White")
-b.printBoard("Black")
+#bestMove=q.select_move(b,b.getLegalMoves("White"),"White")
 
-
-print("COP")
-s.printBoard("White")
-s.printBoard("Black")
-#g.selfPlay()
+#print("BEST MOVE IS", bestMove)
+#print("COP")
+#s.printBoard("White")
+#s.printBoard("Black")
+g.selfPlay()

@@ -34,8 +34,8 @@ class Knight(Piece):
             computedRow = self._currRow + dr
             computedCol = self._currCol + dc
 
-            isLegal,isCap=board.isValidLocation(computedRow,computedCol,self._color)
+            isInBounds=board.inBounds(computedRow,computedCol)
 
-            if isLegal:
+            if isInBounds:
                 atqSQ.add((computedRow,computedCol))
         return atqSQ

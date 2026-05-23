@@ -6,7 +6,7 @@ class Piece:
         self._currCol=cCol
         self._isCaptured=False
         self._Symbol=symbol
-        self._Value=None
+        self._Value=value
 
     #get the captured proprty
     @property
@@ -44,23 +44,23 @@ class Piece:
             computedRow = self._currRow + dr
             computedCol = self._currCol + dc
 
-        while True:
-            isLegal,isCap=board.isValidLocation(computedRow,computedCol,self._color)
+            while True:
+                isLegal,isCap=board.isValidLocation(computedRow,computedCol,self._color)
 
-            if not board.inBounds(computedRow,computedCol):
-                break
-   
-            if isLegal:
-                m = Move(self._currRow,self._currCol,computedRow,computedCol,self,isCap)
-                moves.append(m)
+                if not board.inBounds(computedRow,computedCol):
+                    break
+    
+                if isLegal:
+                    m = Move(self._currRow,self._currCol,computedRow,computedCol,self,isCap)
+                    moves.append(m)
 
-            #stop sliding when you hit your own piece or enemy piece
+                #stop sliding when you hit your own piece or enemy piece
 
-            if isCap or not isLegal:
-                break
-            #Add every tuple until you see the limit for all of them
-            computedRow+=dr
-            computedCol+=dc
+                if isCap or not isLegal:
+                    break
+                #Add every tuple until you see the limit for all of them
+                computedRow+=dr
+                computedCol+=dc
 
 
         return moves  
@@ -71,23 +71,23 @@ class Piece:
             computedRow = self._currRow + dr
             computedCol = self._currCol + dc
 
-        while True:
-            isLegal,isCap=board.isValidLocation(computedRow,computedCol,self._color)
+            while True:
+                isLegal,isCap=board.isValidLocation(computedRow,computedCol,self._color)
 
-            if not board.inBounds(computedRow,computedCol):
-                break
-   
-            if isLegal:
-           
-                attackSQ.add((computedRow,computedCol))
+                if not board.inBounds(computedRow,computedCol):
+                    break
+    
+                if isLegal:
+            
+                    attackSQ.add((computedRow,computedCol))
 
-            #stop sliding when you hit your own piece or enemy piece
+                #stop sliding when you hit your own piece or enemy piece
 
-            if isCap or not isLegal:
-                break
-            #Add every tuple until you see the limit for all of them
-            computedRow+=dr
-            computedCol+=dc
+                if isCap or not isLegal:
+                    break
+                #Add every tuple until you see the limit for all of them
+                computedRow+=dr
+                computedCol+=dc
 
 
         return attackSQ  

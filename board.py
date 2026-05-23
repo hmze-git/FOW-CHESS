@@ -95,9 +95,10 @@ class Board:
                         for c in range (self.cols):
                                 sq = self.grid[r][c]
                                 if sq.is_occupied and sq.pieceOccupying.color == color:
-                                        atqSQ=sq.pieceOccupying.getAttackSquars(self)
+                                        atqSq.add((r,c))
+                                        atqSq.update(sq.pieceOccupying.getAttackSquars(self))
 
-                                        atqSq=atqSq.union(atqSQ)
+                                   
                 
                 return atqSq
                        
@@ -109,7 +110,7 @@ class Board:
                         for c in range (self.cols):
                                 sq = self.grid[r][c]
                                 if sq.is_occupied and sq.pieceOccupying.color == color:
-                                        moves.extend(sq.pieceOccupying.viewLegalMoves(self._board))
+                                        moves.extend(sq.pieceOccupying.viewLegalMoves(self))
                 return moves               
 
         def isValidLocation(self,computedRow,computedCol,color):
@@ -127,6 +128,19 @@ class Board:
                 else:
                        return False,False
 
+        #Is the piece surrounded by a a friendly piece at the specified row and col
+        def isSurroundedByFriend(self,computedRow,computedCol,color):
+     
+                if computedRow>=0 and computedRow<self.rows:
+                        if computedCol>=0 and computedCol<self.cols:
+                                if self.grid[computedRow][computedCol].is_occupied and self.grid[computedRow][computedCol].pieceOccupying.color==color:
+                                        return True
+                                else:
+                                       return False
+                        else:
+                               return False       
+                else:
+                       return False
         def inBounds (self,computedRow,computedCol) :
                 if computedRow>=0 and computedRow<self.rows:
                         if computedCol>=0 and computedCol<self.cols:
@@ -145,8 +159,6 @@ class Board:
                 #check setter if this fails
                 self.grid[move.newRow][move.newCol].pieceOccupying = move.piece
                 self.grid[move.oldRow][move.oldCol].pieceOccupying=None
-
-                print(f"updated piece  {self.grid[move.newRow][move.newCol].pieceOccupying}")
                 move.piece._currRow = move.newRow
                 move.piece._currCol = move.newCol
 
@@ -179,6 +191,8 @@ class Board:
                               if originalSQ.is_occupied:
                                      originPiece=originalSQ.pieceOccupying
                                      newPiece= copy.deepcopy(originPiece)
+                                     newPiece._currRow=r
+                                     newPiece._currCol=c
                                      newBoard.grid[r][c].pieceOccupying=newPiece
                 return newBoard
 

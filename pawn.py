@@ -32,12 +32,13 @@ class Pawn(Piece):
         attackSQ=set()
         dir=1 if self._color=="Black" else -1
 
-        print()
+
         forward = self._currRow+ dir
             #capture moves
         for dc in [-1,1]:
             capRow= forward
             capCol=self._currCol+dc
+            print("CAP COL",capCol)
             if board.inBounds(capRow,capCol):
                     attackSQ.add((capRow,capCol)) 
         return attackSQ

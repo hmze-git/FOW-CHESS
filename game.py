@@ -1,5 +1,6 @@
 from board import Board
 import random
+from QLearning import QLearningAgent
 class Game:
    
     def __init__(self):
@@ -35,19 +36,33 @@ class Game:
 
 
     def selfPlay(self):
+
+        QAgent = QLearningAgent()
+        self._board.printBoard("White")
         while self._numMoves<500:
             moves=self.getLegalMoves("White" if self._isWhitesTurn else "Black")
-            self.board.printBoard("White" if self._isWhitesTurn else "Black")
+ 
             if not moves:
                 print("Draw due to no more moves")
                 return
-           
-            randMove= random.choice(moves)
-            self.board.apply_move(randMove)
-        
-            print(f"{'White' if self._isWhitesTurn else 'Black'} played: {randMove}")
+            
+            moveMade=None
+            if self._isWhitesTurn:
+                moveMade= random.choice(moves)
+               
+                self._board.apply_move(moveMade)
+                self._board.printBoard("White")
+                print("NEXT PLAYER")
+            else:
+                moveMade=QAgent.select_move(self._board,self._board.getLegalMoves("Black"),"Black")
+                self._board.apply_move(moveMade)
+                self._board.printBoard("Black")
+                print("NEXT PLAYER")
 
-            result = self.board.checkWinner(randMove)
+        
+            print(f"{'White' if self._isWhitesTurn else 'Black'} played: {moveMade}")
+
+            result = self._board.checkWinner(moveMade)
             if result:
                 print(f"{result} is the winner")
                 break
