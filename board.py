@@ -152,15 +152,15 @@ class Board:
 
         def apply_move(self,move):
                 targetSq= self.grid[move.newRow][move.newCol]
-
+                piece=self.grid[move.oldRow][move.oldCol].pieceOccupying
                 if targetSq.is_occupied:
                         move.capturedPiece= targetSq.pieceOccupying
 
                 #check setter if this fails
-                self.grid[move.newRow][move.newCol].pieceOccupying = move.piece
+                self.grid[move.newRow][move.newCol].pieceOccupying = piece
                 self.grid[move.oldRow][move.oldCol].pieceOccupying=None
-                move.piece._currRow = move.newRow
-                move.piece._currCol = move.newCol
+                piece._currRow = move.newRow
+                piece._currCol = move.newCol
 
 
         def checkWinner(self,move):
@@ -177,23 +177,18 @@ class Board:
                 newBoard= Board.__new__(Board)
                 newBoard.rows=self.rows
                 newBoard.cols=self.cols
-                newBoard.grid=[
+                newBoard.grid=[]
                        
-                        [
-                                Square(r,c) for c in range(5)
-                        ]
-                         for r in range(6)
-                ] # reads backwards 
-
+       
                 for r in range(self.rows):
-                       for c in range (self.cols):
-                              originalSQ=self.grid[r][c]
-                              if originalSQ.is_occupied:
-                                     originPiece=originalSQ.pieceOccupying
-                                     newPiece= copy.deepcopy(originPiece)
-                                     newPiece._currRow=r
-                                     newPiece._currCol=c
-                                     newBoard.grid[r][c].pieceOccupying=newPiece
+                                row=[]
+                                for c in range (self.cols):
+                                        originalSQ=copy.deepcopy(self.grid[r][c])
+                                        if originalSQ.is_occupied:
+                                                originalSQ.pieceOccupying._currRow=r
+                                                originalSQ.pieceOccupying._currCol=c
+                                        row.append(originalSQ)
+                                newBoard.grid.append(row)
                 return newBoard
 
 
