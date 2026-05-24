@@ -45,8 +45,8 @@ a.saveWeights()
 #run sims against random agent
 
 def load_weights_json(agent, filename="trained_weights.json"):
-    with open(filename, 'r') as f:
-        weights_data = json.load(f)
+    f=open(filename, 'r')
+    weights_data = json.load(f)
     agent._weights = weights_data["Weights"]
     print(f"Weights loaded: {agent.weights}")
     return agent
@@ -56,4 +56,4 @@ agent = QLearningAgent()
 load_weights_json(agent, "trained_weights.json")
 g=Game()
 
-g.randomVsTrained(agent,50,"White")
+g.randomVsTrained(agent,200,"White")

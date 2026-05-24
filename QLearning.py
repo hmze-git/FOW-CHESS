@@ -4,7 +4,7 @@ class QLearningAgent:
         def __init__(self):
             self._weights=[random.uniform(-0.1, 0.1) for _ in range(5)]
             self._epsilon=0.2
-            self._learningRate=0.1 # slow learning set high number of epochs so can see smoth curve
+            self._learningRate=0.05 # slow learning set high number of epochs so can see smoth curve
             self._discountFactor=0.9 # future matters because we dont want to just go for captures and risk exposing by weaking the position 
 
         @property
@@ -67,7 +67,7 @@ class QLearningAgent:
                                 squaresVisited.add(squareToVisit)
             if len(moves)==0:
                 return 0.0
-            return min(totalCapturesAvailable/10.0,1.0) #ratio of capture values to number of moves available
+            return min(totalCapturesAvailable/10.0,1.0) 
         #FIx later off board areas mean safety so include iun count 
         def kingProtection(self,board,color):
 

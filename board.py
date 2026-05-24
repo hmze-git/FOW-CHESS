@@ -217,3 +217,26 @@ class Board:
                                 print()
                                 print("   +----+----+----+----+----+")
                         print()
+        def boardToString(self,color):
+                        visibleSq=self.getVisibleSquares(color)
+                        boardOutput=[]
+                        boardOutput.append("")
+                        boardOutput.append(f"{color}s view")
+                        boardOutput.append("     a    b    c    d    e")
+                        boardOutput.append("   +----+----+----+----+----+")
+                        for r in range(self.rows):
+                                row=f" {r} |"
+                                for c in range(self.cols):
+                                        square = self.grid[r][c]
+                                        if square.is_occupied and square._pieceOccupying.color==color:
+                                                row+=f" {square.pieceOccupying.displaySymbol()} |"        
+                                        elif (r,c) in visibleSq:
+                                                if square.is_occupied and square._pieceOccupying.color!=color:
+                                                       row+=f" {square.pieceOccupying.displaySymbol()} |"
+                                                if not square.is_occupied :
+                                                        row+=f" #  |"
+                                        else:
+                                                row+=f" ?? |"
+                                boardOutput.append(row)
+                                boardOutput.append("   +----+----+----+----+----+")
+                        return "\n".join(boardOutput)

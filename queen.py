@@ -1,7 +1,7 @@
 from piece import Piece
 class Queen(Piece):
     def  __init__(self,cRow,cCol,color):
-        super().__init__(cRow,cCol,color,"Q",9)
+        super().__init__(cRow,cCol,color,"Q",7)
 
     def viewLegalMoves(self,board):
            directions = [(-1,0),(1,0),
