@@ -5,7 +5,7 @@ class QLearningAgent:
             self._weights=[random.uniform(-0.1, 0.1) for _ in range(5)]
             self._epsilon=0.2
             self._learningRate=0.05 # slow learning set high number of epochs so can see smoth curve
-            self._discountFactor=0.9 # future matters because we dont want to just go for captures and risk exposing by weaking the position 
+            self._discountFactor=0.6 # since there is no monte carlo integration discount is set to a more greedy value to force imeediate learing 
 
         @property
         def discountFactor(self):
