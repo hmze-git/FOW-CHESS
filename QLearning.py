@@ -2,9 +2,9 @@ import random
 import json
 class QLearningAgent:
         def __init__(self):
-            self._weights=[random.uniform(0.01,0.1) for _ in range(5)]
+            self._weights=[random.uniform(-0.1, 0.1) for _ in range(5)]
             self._epsilon=0.2
-            self._learningRate=0.002 # slow learning set high number of epochs so can see smoth curve
+            self._learningRate=0.1 # slow learning set high number of epochs so can see smoth curve
             self._discountFactor=0.9 # future matters because we dont want to just go for captures and risk exposing by weaking the position 
 
         @property
@@ -36,7 +36,7 @@ class QLearningAgent:
                     sq=board.grid[r][c]
 
                     if sq.is_occupied and  sq.pieceOccupying.color != color and sq.pieceOccupying.symbol=="K":
-                        return 1.0 if (r,c) in visibility else 0.0
+                        return 1.0 if (r,c) in visibility else 0.001 
                               
             return 0.0
         def visibilityLevel (self,visibleSquares):
@@ -48,10 +48,10 @@ class QLearningAgent:
              moves=board.getLegalMoves(color)
 
             # this might break later if too many moves become available
-             return min(len(moves) /30,1.0)
+             return len(moves) / (board.rows*board.cols)
         def pieceCapturability(self,board,color):
             moves = board.getLegalMoves(color)
-            bestCapture=0
+            totalCapturesAvailable=0
             squaresVisited = set() # prevent double counting capturing of a piece
 
             for m in moves:
@@ -63,9 +63,11 @@ class QLearningAgent:
                             squareToVisit= (m.newRow,m.newCol)
                             if squareToVisit not in squaresVisited:
                                        
-                                bestCapture=max(bestCapture,tagetSq.pieceOccupying.Value/10) #Scale captures to the same level as the learning loop to prevent weird mismatches
+                                totalCapturesAvailable+=tagetSq.pieceOccupying.Value #Scale captures to the same level as the learning loop to prevent weird mismatches
                                 squaresVisited.add(squareToVisit)
-            return min(bestCapture,1.0)
+            if len(moves)==0:
+                return 0.0
+            return min(totalCapturesAvailable/10.0,1.0) #ratio of capture values to number of moves available
         #FIx later off board areas mean safety so include iun count 
         def kingProtection(self,board,color):
 
@@ -77,10 +79,6 @@ class QLearningAgent:
                         count=sq.pieceOccupying.numPiecesSurrounding(board)
                         protectionRatio=count/8
                         return protectionRatio
-                        
-
-           
-
             # if game end
             return 0.0 
         
@@ -91,12 +89,12 @@ class QLearningAgent:
         def updateWeights(self,prevFeatures,tempralDiff):
             self._weights=[
                  
-                 max(-5.0,min(5.0,weight+(self._learningRate*tempralDiff*feature))) for weight,feature in zip(self._weights,prevFeatures)]
+                weight+(self._learningRate*tempralDiff*feature) for weight,feature in zip(self._weights,prevFeatures)]
              
         def selectMove(self,board,legal_moves,color,learning=True):
              
-            #DO NOT UPDATE THE SQUARES WHEN RUNNING THE RL IT BREAKS FOG MASK 
-            visibleSquares= board.getVisibleSquares(color)  
+            #DO NOT UPDATE THE SQUARES WHEN RUNNING THE MOVE CHANGE IT BREAKS FOG MASK 
+            #visibleSquares= board.getVisibleSquares(color)  
 
             if learning:
                 if random.random()<self._epsilon:
@@ -109,9 +107,12 @@ class QLearningAgent:
             bestScore=float('-inf')
             for m in legal_moves:
                 bCopy=board.copyBoard()
+               
+
                 bCopy.apply_move(m)
+                visibleSquares= bCopy.getVisibleSquares(color)  
                 features=self.extractFeatures(bCopy,color,visibleSquares)
-                score= self.getQvalue(features)+ random.uniform(0,0.001) # tie breaking
+                score= self.getQvalue(features)
 
 
 

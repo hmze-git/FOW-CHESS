@@ -32,7 +32,7 @@ import json
 #s.printBoard("White")
 #s.printBoard("Black")
 #g.selfPlay()
-a=train(10)
+a=train(500)
 
 #save final weights to file
 a.saveWeights()
@@ -56,4 +56,4 @@ agent = QLearningAgent()
 load_weights_json(agent, "trained_weights.json")
 g=Game()
 
-g.randomVsTrained(agent,10,"White")
+g.randomVsTrained(agent,50,"White")

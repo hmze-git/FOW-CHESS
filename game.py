@@ -1,3 +1,5 @@
+from unittest import result
+
 from board import Board
 import random
 from QLearning import QLearningAgent
@@ -39,7 +41,9 @@ class Game:
 
     def selfPlay(self,QAgent,epochNum):
         print(f"Epoch Number: {epochNum}")
-        lastFeatures={"White":None,"Black":None}
+        
+        lastMove=None
+        result=None
         while self._numMoves<200:
 
             color ="White" if self._isWhitesTurn else "Black"
@@ -48,34 +52,52 @@ class Game:
             if not moves:
                 
                 return "Draw"
+            #Random agent self learning attempt 
+            #if its not agents turn then apply random move and go on
+            #if color!="White":
+             #   moveMade= self.randomMove(moves)
+              #  self._board.apply_move(moveMade)
+               # result = self._board.checkWinner(moveMade)
+                #if result is not None:
+                 #   print(f"{result} is the winner")
+                  #  return result
+                #else:
+                 #   continue
+
+            #prev state
+                 #returns winning pieces color
+            #test if good keep if not then we take the featurres after
             
-            moveMade=None
+            if lastMove is not None:
+                result = self._board.checkWinner(lastMove)
+            if result is not None:
+
+                finalReward=1.0 if result ==color else -1.0 #give a large reward for winning and a similar large punishment for losing
+                temporalDiff=finalReward-qBeforeMove
+                #use features after is the position that led to a loss so we want those features to be associated with a loss
+                QAgent.updateWeights(featuresBefore,temporalDiff)
+                return result
+
+    
             visibleBefore= self.board.getVisibleSquares(color)
             featuresBefore = QAgent.extractFeatures(self._board,color,visibleBefore)
             qBeforeMove=QAgent.getQvalue(featuresBefore)
 
-            moveMade=QAgent.selectMove(self._board,self._board.getLegalMoves(color),color)
-            self._board.apply_move(moveMade)
+            lastMove=QAgent.selectMove(self._board, moves, color)
+            self._board.apply_move(lastMove)
 
-            if featuresBefore[0] > 0:  # canSeeEnemyKing
-                print(f"King visible at move {self._numMoves}")
- 
-            if moveMade.wasCap:
-                print(f"CAPTURE: {color} captured {moveMade.capturedPiece.symbol}")
+            #minor reward for making a move to push up wins
+            reward=0.001 # introduce a small reward for making moves because currently only captures and wins give rewards which may happen too spread out
 
-            reward=0.0
+            if lastMove.wasCap:
+                    reward+= (lastMove.capturedPiece.Value/ 10) #9 is the highest value in the queen in this way capturing a piece returns that isnt king gives 0.9 and the king 1.0
 
-            if moveMade.wasCap:
-                if moveMade.capturedPiece.symbol =="K":
-                     reward= 3.0
-                else:
-                    reward= (moveMade.capturedPiece.Value/ 10) #9 is the highest value in the queen in this way capturing a piece returns that isnt king gives 0.9 and the king 1.0
-
+        # after move state
             visibleAfter = self._board.getVisibleSquares(color)
             featuresAfter = QAgent.extractFeatures(self._board,color,visibleAfter)
             qAfterMove= QAgent.getQvalue(featuresAfter)
 
-            #SARSA because we work with actions actually taken not what we can take and its value
+       
             temporalDiff=reward+QAgent.discountFactor*qAfterMove-qBeforeMove
 
 
@@ -83,30 +105,11 @@ class Game:
             QAgent.updateWeights(featuresBefore,temporalDiff) # update weights based on how much better or worse the position is now
             print(f"Weight After {QAgent.weights}")
 
-            lastFeatures[color]=featuresAfter
-
-            #returns winning pieces color
-            result = self._board.checkWinner(moveMade)
-            if result==color:
-                print(f"{result} is the winner")
-                reward=10.0
-            else:
-                reward=-10.0
-            
-            
-                # since were using 1 agent use loss signal as well 
-                # updates weights to account for what leads to a loss or bad outcome with a strong signal
-                loserColor="Black" if result =="White" else "White"
-                terminalDiff=-3.0-QAgent.getQvalue(lastFeatures[loserColor])
-
-                #use features after is the position that led to a loss so we want those features to be associated with a loss
-                QAgent.updateWeights(lastFeatures[loserColor],terminalDiff)
-                return result
-
             self._isWhitesTurn = not self._isWhitesTurn
             self._numMoves += 1
         return "Draw"
-
+    def randomMove(self,moves):
+        return random.choice(moves)
     def randomVsTrained(self,trainedAgent,NumRuns,trainedAgentCol):
         wins=0
         losses=0
