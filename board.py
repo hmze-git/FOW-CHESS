@@ -155,6 +155,7 @@ class Board:
                 piece=self.grid[move.oldRow][move.oldCol].pieceOccupying
                 if targetSq.is_occupied:
                         move.capturedPiece= targetSq.pieceOccupying
+                        move.WasCap=True
 
                 #check setter if this fails
                 self.grid[move.newRow][move.newCol].pieceOccupying = piece
@@ -187,8 +188,8 @@ class Board:
                                         if originalSQ.is_occupied:
                                                 originalSQ.pieceOccupying._currRow=r
                                                 originalSQ.pieceOccupying._currCol=c
-                                        row.append(originalSQ)
-                                newBoard.grid.append(row)
+                                        row.append(originalSQ)# rOW ENTRIES
+                                newBoard.grid.append(row) #FULL ROW
                 return newBoard
 
 

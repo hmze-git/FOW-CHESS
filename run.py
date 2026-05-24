@@ -1,9 +1,11 @@
 from game import Game
 from move import Move
 from QLearning import QLearningAgent
-g = Game()
-g.viewMoves()
-b=g.board
+from train import train
+import json
+#g = Game()
+#g.viewMoves()
+#b=g.board
 
 
 #move = b.grid[4][0].pieceOccupying.viewLegalMoves(b)[0]
@@ -17,8 +19,8 @@ b=g.board
 #print(g.board.checkWinner(amove))  # should print "white"
 #b.printBoard()
 
-s= g.board.copyBoard()
-q=QLearningAgent()
+#s= g.board.copyBoard()
+#q=QLearningAgent()
 #print("ORG")
 #b.printBoard("White")
 #b.printBoard("Black")
@@ -29,4 +31,29 @@ q=QLearningAgent()
 #print("COP")
 #s.printBoard("White")
 #s.printBoard("Black")
-g.selfPlay()
+#g.selfPlay()
+a=train(10)
+
+#save final weights to file
+a.saveWeights()
+
+#load from file
+
+
+
+
+#run sims against random agent
+
+def load_weights_json(agent, filename="trained_weights.json"):
+    with open(filename, 'r') as f:
+        weights_data = json.load(f)
+    agent._weights = weights_data["Weights"]
+    print(f"Weights loaded: {agent.weights}")
+    return agent
+
+# Usage:
+agent = QLearningAgent()
+load_weights_json(agent, "trained_weights.json")
+g=Game()
+
+g.randomVsTrained(agent,10,"White")

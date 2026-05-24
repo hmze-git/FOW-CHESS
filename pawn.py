@@ -38,7 +38,7 @@ class Pawn(Piece):
         for dc in [-1,1]:
             capRow= forward
             capCol=self._currCol+dc
-            print("CAP COL",capCol)
+
             if board.inBounds(capRow,capCol):
                     attackSQ.add((capRow,capCol)) 
         return attackSQ
